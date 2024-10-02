@@ -131,6 +131,8 @@ a:focus-visible {
 /* || DASH HEADER, CONTAINER & FOOTER */
 
 .dash-header {
+  display: flex;
+  justify-content: center;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -141,9 +143,21 @@ a:focus-visible {
 
 .dash-header__container {
   display: flex;
+  flex: auto;
   flex-flow: row nowrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+}
+
+.dash-header__title {
+  flex: auto;
+  text-align: center;
+}
+
+.dash-header__button {
+  font-size: 1rem;
+  width: 18px;
+  height: 16px;
 }
 
 .dash-header__nav {
@@ -172,8 +186,3 @@ a:focus-visible {
   gap: 1em;
 }
 
-.dash-footer__button {
-  font-size: 1rem;
-  width: auto;
-  height: auto;
-}
