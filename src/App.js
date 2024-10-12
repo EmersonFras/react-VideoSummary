@@ -18,9 +18,8 @@ function App() {
         
           <Route index element={<Welcome />} />
 
-          <Route path="videos">
-            <Route index element={<VideosList />} />
-          </Route>
+          <Route path="videos/:userId" element={<VideosList />} />
+          
           <Route path="users">
             <Route index element={<UsersList />} />
           </Route>
