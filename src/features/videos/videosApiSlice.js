@@ -15,8 +15,11 @@ export const videosApiSlice = apiSlice.injectEndpoints({
             validateStatus: (response, result) => {
                 return response.status === 200 && !result.isError
             },
-            keepUnusedDataFor: 5, // for development default is 60
             transformResponse: responseData => {
+                if (!Array.isArray(responseData)) {
+                    console.error("Expected an array, got:", responseData);
+                    return initialState; // Or handle it as you see fit
+                }
                 const loadedVideos = responseData.map(video => {
                     video.id = video._id;
                     return video;
@@ -31,12 +34,47 @@ export const videosApiSlice = apiSlice.injectEndpoints({
                     ]
                 } else return [{ type: 'Video', id: 'LIST' }]
             }
-        })
+        }),
+        addNewVideo: builder.mutation({
+            query: initialVideoData => ({
+                url: '/videos',
+                method: 'POST',
+                body: {
+                    ...initialVideoData,
+                },
+                invalidatesTags: [
+                    { type: 'Video', id: 'LIST' }
+                ]
+            })
+        }),
+        updateVideo: builder.mutation({
+            query: initialVideoData => ({
+                url: `/videos`,
+                method: 'PATCH',
+                body: {
+                    ...initialVideoData,
+                },
+                invalidatesTags: (result, error, arg) => [{ type: 'Video', id: arg.id }]
+            }),
+        }),
+        deleteVideo: builder.mutation({
+            query: ({ id }) => ({
+                url: '/videos',
+                method: 'DELETE',
+                body: {
+                    id
+                },
+                invalidatesTags: (result, error, arg) => [{ type: 'Video', id: arg.id }]
+            }),
+        }),
     })
 })
 
 export const {
     useGetVideosQuery,
+    useAddNewVideoMutation,
+    useUpdateVideoMutation,
+    useDeleteVideoMutation,
 } = videosApiSlice
 
 export const selectVideosResult = videosApiSlice.endpoints.getVideos.select()

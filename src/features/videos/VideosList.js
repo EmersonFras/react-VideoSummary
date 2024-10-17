@@ -13,7 +13,11 @@ const VideosList = () => {
     isSuccess,
     isError,
     error
-  } = useGetVideosQuery(userId)
+  } = useGetVideosQuery(userId, {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true
+  })
 
   let content
 
