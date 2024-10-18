@@ -20,21 +20,21 @@ function App() {
         <Route index element={<Public />} />
         <Route path="login" element={<Login />} /> 
         
-        <Route element={<Prefetch />}>
-          <Route path="dash" element={<DashLayout />}>
+        <Route path="dash/:id" element={<Prefetch />}>
+          <Route element={<DashLayout />}>
           
             <Route index element={<Welcome />} />
 
             
             <Route path="users">
               <Route index element={<UsersList />} />
-              <Route path=":id" element={<EditUser />} />
+              <Route path="edit" element={<EditUser />} />
               <Route path="new" element={<NewUserForm />} />
             </Route>
 
             <Route path="videos">
-              <Route path=":userId" element={<VideosList />} />
-              <Route path=":id" element={<EditVideo />} />
+              <Route index element={<VideosList />} />
+              <Route path=":videoId" element={<EditVideo />} />
               <Route path="new" element={<NewVideo />} />
             </Route>
           </Route>

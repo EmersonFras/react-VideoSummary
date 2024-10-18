@@ -12,6 +12,7 @@ export const videosApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getVideos: builder.query({
             query: (userId) => `/videos?userId=${userId}`,
+            keepUnusedDataFor: 600, // Cache for 10 minutes
             validateStatus: (response, result) => {
                 return response.status === 200 && !result.isError
             },
@@ -23,7 +24,7 @@ export const videosApiSlice = apiSlice.injectEndpoints({
                 const loadedVideos = responseData.map(video => {
                     video.id = video._id;
                     return video;
-                });
+                })
                 return videosAdapter.setAll(initialState, loadedVideos)
             },
             providesTags: (result, error, arg) => {
@@ -77,20 +78,38 @@ export const {
     useDeleteVideoMutation,
 } = videosApiSlice
 
-export const selectVideosResult = videosApiSlice.endpoints.getVideos.select()
+// export const selectVideosResult = videosApiSlice.endpoints.getVideos.select()
 
+// const selectVideosData = createSelector(
+//     selectVideosResult,
+//     videosResult => videosResult.data
+// )
+
+// export const {
+//     selectAll: selectAllVideos,
+//     selectById: selectVideoById
+
+// } = videosAdapter.getSelectors(state => selectVideosData(state) ?? initialState)
+
+// This creates a base selector to access video data based on userId.
+const selectVideosResult = (state, userId) => 
+    state.api.queries[`getVideos("${userId}")`] ?? initialState;
+
+// Selector to get video data.
 const selectVideosData = createSelector(
-    selectVideosResult,
+    (state, userId) => selectVideosResult(state, userId),
     videosResult => videosResult.data
-)
+);
 
-export const {
-    selectAll: selectAllVideos,
-    selectIds: selectVideoIds
+// Create selectors for all videos and by id based on userId.
+export const selectAllVideos = (userId) => 
+    createSelector(
+        state => selectVideosData(state, userId) ?? initialState,
+        videos => videosAdapter.getSelectors().selectAll(videos)
+    );
 
-} = videosAdapter.getSelectors(state => selectVideosData(state) ?? initialState)
-
-export const selectVideoById = (state, videoId) => {
-    const videosData = state.api.queries[`getVideos("66f4b8ff0ee2af52bed1aabf")`]?.data;
-    return videosData?.entities[videoId]; // Access entities to get the specific video
-};
+export const selectVideoById = (userId) => 
+    createSelector(
+        (state) => selectVideosData(state, userId),
+        (videosData) => (videoId) => videosData?.entities ? videosData.entities[videoId] || null : null
+    );

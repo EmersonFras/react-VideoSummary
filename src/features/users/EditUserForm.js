@@ -45,9 +45,9 @@ const EditUserForm = ({ user }) => {
             setUsername('')
             setPassword('')
             setRoles([])
-            navigate('/dash/users')
+            navigate(`/dash/${user}/users`)
         }
-    }, [isSuccess, isDelSuccess, navigate])
+    }, [isSuccess, isDelSuccess, navigate, user])
 
     const onUsernameChanged = e => setUsername(e.target.value)
     const onPasswordChanged = e => setPassword(e.target.value)
@@ -148,7 +148,16 @@ const EditUserForm = ({ user }) => {
                     />
                 </label>
                 <label className="form__label" htmlFor="roles">Assigned Roles:</label>
-                <select id="roles" name="roles" className={`form__input ${validRolesClass}`} multiple={true} size="2" value={roles} onChange={onRolesChanged}>{options}</select>
+                <select 
+                    id="roles" 
+                    name="roles" 
+                    className={`form__input ${validRolesClass}`} 
+                    multiple={true} 
+                    size="2" 
+                    value={roles} 
+                    onChange={onRolesChanged}>
+                    {options}
+                </select>
             </form>
         </>
     )

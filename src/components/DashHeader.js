@@ -1,17 +1,18 @@
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useLocation, useParams } from "react-router-dom"
 
 const DashHeader = () => {
+  const { id } = useParams()
 
   const navigate = useNavigate()
   const { pathname } = useLocation()
   
-  const onGoHomeClicked = () => navigate('/dash')
+  const onGoHomeClicked = () => navigate(`/dash/${id}`)
 
   let goHomeButton = <div className="dash-header__button"></div>
-  if (pathname !== '/dash') {
+  if (pathname !== `/dash/${id}`) {
       goHomeButton = (
           <button 
           className="dash-header__button icon-button" 
@@ -27,7 +28,7 @@ const DashHeader = () => {
     <header className="dash-header">
         <div className="dash-header__container">
           {goHomeButton}  
-            <Link to="/dash" className="dash-header__title">
+            <Link to={`/dash/${id}`} className="dash-header__title">
                 <h1 className="dash-header__title">Videos</h1>
             </Link>
             <nav className="dash-header__nav">

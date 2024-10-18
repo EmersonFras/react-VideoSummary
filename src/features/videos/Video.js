@@ -6,17 +6,16 @@ import { useSelector } from "react-redux"
 import { selectVideoById } from "./videosApiSlice"
 
 
-const Video = ({ videoId }) => {
-    const video = useSelector(state => selectVideoById(state, videoId));
+const Video = ({ userId, videoId }) => {
+    const video = useSelector((state) => selectVideoById(userId)(state)(videoId));
 
-    console.log(video)
     const navigate = useNavigate()
 
     if (video) {
         const created = new Date(video.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long' })
         const updated = new Date(video.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long' })
 
-        const handleEdit = () => navigate(`/dash/videos/${videoId}`)
+        const handleEdit = () => navigate(`/dash/${userId}/videos/${videoId}`)
 
         return (
             <tr className="table__row">

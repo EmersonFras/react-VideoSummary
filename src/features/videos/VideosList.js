@@ -1,11 +1,12 @@
 
 import { useGetVideosQuery } from './videosApiSlice'
 import Video from './Video'
-import { useParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 
 const VideosList = () => {
 
-  const { userId } = useParams()
+  const [searchParams] = useSearchParams(); // Get the search params
+  const userId = searchParams.get('userId'); // Extract userId from the query string
 
   const {
     data: videos,
@@ -31,7 +32,7 @@ const VideosList = () => {
   if (isSuccess) {
     const { ids } = videos
     
-    const tableContent = ids?.length ? ids.map(videoId => <Video key={videoId} videoId={videoId} />) : null
+    const tableContent = ids?.length ? ids.map(videoId => <Video key={videoId} userId={userId} videoId={videoId} />) : null
 
     content = (
       <table className="table table--videos">

@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 const Welcome = () => {
-    
+    const { id } = useParams()
     const date = new Date()
     const today = new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(date)
 
@@ -11,10 +12,10 @@ const Welcome = () => {
 
             <h1>Weclome!</h1>
 
-            <p><Link to="/dash/videos">View Videos</Link></p>
-            <p><Link to="/dash/videos/new">Add Video</Link></p>
-            <p><Link to="/dash/users">View User Settings</Link></p>
-            <p><Link to="/dash/users/new">Add User</Link></p>
+            <p><Link to={`/dash/${id}/videos?userId=${id}`}>View Videos</Link></p>
+            <p><Link to={`/dash/${id}/videos/new`}>Add Video</Link></p>
+            <p><Link to={`/dash/${id}/users`}>View User Settings</Link></p>
+            <p><Link to={`/dash/${id}/users/new`}>Add User</Link></p>
 
         </section>
     )

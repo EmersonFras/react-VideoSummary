@@ -6,7 +6,10 @@ import EditUserForm from './EditUserForm'
 const EditUser = () => {
     const { id } = useParams()
 
-    const user = useSelector(state => selectUserById(state, id))
+    const user = useSelector(state => {
+        console.log(state)
+        return selectUserById(state, id)
+    })
     
     const content = user ? <EditUserForm user={user} /> : <p>Loading...</p>
 
